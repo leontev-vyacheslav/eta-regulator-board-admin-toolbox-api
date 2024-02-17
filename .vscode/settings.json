@@ -9,6 +9,16 @@
         "**/__pycache__": true,
     },
     "pylint.args": [
-        "--disable=missing-module-docstring,missing-function-docstring,missing-class-docstring"
-    ]
+        "--disable=missing-module-docstring,missing-function-docstring,missing-class-docstring",
+        "--max-line-length=120"
+    ],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "eta_regulatior_board_admin",
+            "database": "${workspaceFolder:eta-regulator-board-admin-toolbox-api}/data/data.sqlite3"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
 }

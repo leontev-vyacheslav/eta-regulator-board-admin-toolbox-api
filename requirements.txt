@@ -1,4 +1,6 @@
 fastapi
 uvicorn
+sqlalchemy
+aiosqlite
 pystray
 psutil
