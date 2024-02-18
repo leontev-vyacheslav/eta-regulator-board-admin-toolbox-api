@@ -7,3 +7,5 @@ dist
 .dist
 
 sqlite3.exe
+sqlite3.dll
+sqlite3.def

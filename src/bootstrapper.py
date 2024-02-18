@@ -41,7 +41,7 @@ icon = Icon(
     )
 )
 
-def start_server(host="0.0.0.0", port=5012, num_workers=1, reload=False):
+def start_server(host="0.0.0.0", port=5020, num_workers=1, reload=False):
     uvicorn.run("src.main:app",
                 host=host,
                 port=port,
