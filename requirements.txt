@@ -4,3 +4,4 @@ sqlalchemy
 aiosqlite
 pystray
 psutil
+pyaes
