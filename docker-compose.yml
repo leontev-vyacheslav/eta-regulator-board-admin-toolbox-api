@@ -9,3 +9,13 @@ services:
     image: energytechaudit-regulator-board-admin-toolbox-api-image
     ports:
       - "5020:5020"
+    volumes:
+      - sqlite_data:/app/_internal/data
+
+volumes:
+  sqlite_data:
+    driver_opts:
+      type: none
+      device: /home/admin-leo/_data
+      o: bind
+
