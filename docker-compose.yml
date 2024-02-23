@@ -1,0 +1,11 @@
+services:
+  web-api:
+    container_name: energytechaudit-regulator-board-admin-toolbox-api
+    environment:
+      - WEB_API_PORT=5020
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: energytechaudit-regulator-board-admin-toolbox-api-image
+    ports:
+      - "5020:5020"
