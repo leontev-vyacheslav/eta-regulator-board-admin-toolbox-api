@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, Response
+from fastapi import Depends, APIRouter, Response, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -6,12 +6,12 @@ from src.data_access.database_connect import get_async_session
 from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel
 from src.models.regulator_device_model import RegulatorDeviceModel
 
-
 router = APIRouter(prefix='/regulator-devices', tags=['Regulators'])
 
 
+
 @router.get('/')
-async def get_regulators(session: AsyncSession = Depends(get_async_session)):
+async def get_regulators(request: Request, session: AsyncSession = Depends(get_async_session)):
     query = await session.execute(select(RegulatorDeviceDataModel))
 
     devices = [
@@ -24,6 +24,9 @@ async def get_regulators(session: AsyncSession = Depends(get_async_session)):
         }
         for row in query.scalars()
     ]
+
+    for i in range(1, 5):
+        await request.app.state.socket_io_server.emit('message', 'test' + str(i))
 
     return devices
 

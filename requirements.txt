@@ -5,3 +5,4 @@ aiosqlite
 pystray
 psutil
 pyaes
+python-socketio
