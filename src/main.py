@@ -5,6 +5,7 @@ from socketio import ASGIApp, AsyncServer
 from src.routers.access_token_router import router as access_token_router
 from src.routers.root_router import router as root_router
 from src.routers.regulator_device_router import router as regulator_device_router
+from src.routers.deployment_package_router import router as deployment_package_router
 
 app = FastAPI(
     title='eta_regulator_board_admin_toolbox',
@@ -23,6 +24,7 @@ app.add_middleware(
 app.include_router(root_router)
 app.include_router(regulator_device_router)
 app.include_router(access_token_router)
+app.include_router(deployment_package_router)
 
 socket_io_server = AsyncServer(async_mode='asgi')
 

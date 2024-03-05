@@ -6,3 +6,4 @@ pystray
 psutil
 pyaes
 python-socketio
+python-multipart
