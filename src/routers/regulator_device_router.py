@@ -27,7 +27,7 @@ async def get_regulators(request: Request, session: AsyncSession = Depends(get_a
 
     for i in range(1, 5):
         await request.app.state.socket_io_server.emit('message', 'test' + str(i))
-
+    # TypeAdapter(type=List[RegulatorDeviceModel]).validate_python([row for row in query.scalars()])
     return devices
 
 
