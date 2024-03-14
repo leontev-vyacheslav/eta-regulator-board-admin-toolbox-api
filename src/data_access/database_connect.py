@@ -3,10 +3,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from src.utils.debugging import is_debug
 
-engine = create_async_engine(
-    "sqlite+aiosqlite:///data/data.sqlite3" if is_debug()
-    else "sqlite+aiosqlite:///_internal/data/data.sqlite3"
-)
+DB_PROVIDER = 'sqlite+aiosqlite://'
+DB_URL = 'data' if is_debug() else '_internal/data'
+DB_FILE = 'data.sqlite3'
+
+engine = create_async_engine(f'{DB_PROVIDER}/{DB_URL}/{DB_FILE}')
 async_session_maker = async_sessionmaker(engine)
 
 
