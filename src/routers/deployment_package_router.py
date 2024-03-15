@@ -10,7 +10,7 @@ router = APIRouter(prefix="/deployments", tags=["Deployments"])
 
 
 @router.get("/list")
-async def get_deployments(web_app: str):
+async def get_deployments(web_app: str | None = None):
     deployment_packages = get_deployment_packages(web_app)
 
     return deployment_packages

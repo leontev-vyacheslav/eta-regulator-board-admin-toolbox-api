@@ -6,7 +6,7 @@ from src.models.deployment_package import DeploymentPackage
 from src.utils.debugging import is_debug
 
 
-def get_deployment_packages(web_app: str):
+def get_deployment_packages(web_app: str | None):
 
     deployment_package_path = (
         "data/deployment/" if is_debug() else "_internal/data/deployment/"
@@ -24,7 +24,7 @@ def get_deployment_packages(web_app: str):
             for package in (
                 DeploymentPackage(file=path, date=strptime(path.stem.split("_")[-1]))
                 for path in Path(deployment_package_path).iterdir()
-                if path.suffix == ".zip" and web_app in path.name
+                if path.suffix == ".zip" and (web_app is None or web_app in path.name)
             )
             if package.date is not None
         ],
