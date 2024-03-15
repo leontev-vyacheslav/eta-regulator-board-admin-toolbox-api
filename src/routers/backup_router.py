@@ -6,7 +6,7 @@ from src.data_access.database_connect import DB_URL, DB_FILE
 
 router = APIRouter(prefix='/backups')
 
-@router.get('')
+@router.get("/")
 async def get_database():
     root = Path(__file__).parent.parent.parent
 
