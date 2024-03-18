@@ -1,17 +1,24 @@
+from typing import Annotated
 from fastapi import Depends, APIRouter, Response, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from src.data_access.database_connect import get_async_session
 from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel
+from src.models.auth_user_model import AuthUserModel
 from src.models.regulator_device_model import RegulatorDeviceModel
+from src.utils.auth_helper import get_current_user
 
 router = APIRouter(prefix='/regulator-devices', tags=['Regulators'])
 
 
 
 @router.get('/')
-async def get_regulators(request: Request, session: AsyncSession = Depends(get_async_session)):
+async def get_regulators(
+    request: Request,
+    session: Annotated[AsyncSession, Depends(get_async_session)],
+    current_user: Annotated[AuthUserModel, Depends(get_current_user)]
+):
     query = await session.execute(select(RegulatorDeviceDataModel))
 
     devices = [

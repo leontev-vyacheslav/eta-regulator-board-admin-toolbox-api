@@ -10,7 +10,10 @@
     },
     "pylint.args": [
         "--disable=missing-module-docstring,missing-function-docstring,missing-class-docstring",
-        "--max-line-length=120"
+        "--max-line-length=180",
+    ],
+    "black-formatter.args": [
+        "--line-length=180",
     ],
     "sqltools.connections": [
         {

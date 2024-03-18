@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 
 from src.data_access.database_connect import DB_URL, DB_FILE
 
-router = APIRouter(prefix='/backups')
+router = APIRouter(prefix='/backups', tags=['Backups'])
 
 @router.get("/")
 async def get_database():
