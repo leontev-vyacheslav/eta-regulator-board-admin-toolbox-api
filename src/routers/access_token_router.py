@@ -1,17 +1,27 @@
-from fastapi import APIRouter, Depends
+from typing import Annotated
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.data_access.database_connect import get_async_session
 from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel
 from src.models.access_token_model import AccessTokenModel
+from src.utils.auth_helper import authorize
 from src.utils.encoding import create_access_token
 
 
-router = APIRouter(prefix='/access-token', tags=['Access Token'])
+router = APIRouter(prefix="/access-token", tags=["Access Tokens"])
 
-@router.get('/{device_id}')
-async def get_access_token(device_id: str, duration: int, session: AsyncSession = Depends(get_async_session)):
+
+@router.get("/{device_id}")
+@authorize()
+async def get_access_token(
+    # pylint: disable=unused-argument
+    request: Request,
+    device_id: str,
+    duration: int,
+    session: Annotated[AsyncSession, Depends(get_async_session)],
+):
     device = await session.get(RegulatorDeviceDataModel, device_id)
 
     if device is None:

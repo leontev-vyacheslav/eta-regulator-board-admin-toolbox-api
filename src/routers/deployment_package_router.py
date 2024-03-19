@@ -1,7 +1,8 @@
 from pathlib import Path
-from fastapi import File, HTTPException, Response, UploadFile, status
+from fastapi import File, HTTPException, Request, Response, UploadFile, status
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
+from src.utils.auth_helper import authorize
 from src.utils.debugging import is_debug
 from src.utils.deployments import get_deployment_packages
 
@@ -10,15 +11,24 @@ router = APIRouter(prefix="/deployments", tags=["Deployments"])
 
 
 @router.get("/list")
-async def get_deployments(web_app: str | None = None):
+@authorize()
+async def get_deployments(
+    # pylint: disable=unused-argument
+    request: Request,
+    web_app: str | None = None,
+):
     deployment_packages = get_deployment_packages(web_app)
 
     return deployment_packages
 
 
-
 @router.post("/")
-async def upload_deployment(file: UploadFile = File(...)):
+@authorize()
+async def upload_deployment(
+    # pylint: disable=unused-argument
+    request: Request,
+    file: UploadFile = File(...),
+):
     if Path(file.filename).suffix != ".zip":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -26,11 +36,7 @@ async def upload_deployment(file: UploadFile = File(...)):
         )
 
     with open(
-        (
-            f"data/deployment/{file.filename}"
-            if is_debug()
-            else f"_internal/data/deployment/{file.filename}"
-        ),
+        (f"data/deployment/{file.filename}" if is_debug() else f"_internal/data/deployment/{file.filename}"),
         "wb",
     ) as f:
         f.write(file.file.read())
@@ -39,7 +45,12 @@ async def upload_deployment(file: UploadFile = File(...)):
 
 
 @router.get("/")
-async def download_deployment(web_app: str):
+@authorize()
+async def download_deployment(
+    # pylint: disable=unused-argument
+    request: Request,
+    web_app: str,
+):
     deployment_packages = get_deployment_packages(web_app)
 
     last_deployment_package = deployment_packages[-1] if deployment_packages else None

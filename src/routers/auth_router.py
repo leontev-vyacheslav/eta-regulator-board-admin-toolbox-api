@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import Response
 
@@ -14,7 +15,7 @@ from src.utils.auth_helper import create_access_token, verify_password
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.get("/sign-in")
-async def sign_in(signin: SingInModel, session: AsyncSession = Depends(get_async_session)):
+async def sign_in(signin: SingInModel, session: Annotated[AsyncSession, Depends(get_async_session)],):
     user = (await session.scalars(select(UserDataModel).where(UserDataModel.login == signin.login))).first()
 
     if user is None:
