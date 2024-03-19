@@ -44,9 +44,14 @@ def authorize():
             )
             request = kwargs.get("request")
             try:
-                token = request.headers.get("Authorization").replace('Bearer ', '')
-                payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-                username: str = payload.get("sub")
+                auth_header = request.headers.get("Authorization")
+                if auth_header is not None:
+                    token = auth_header.replace('Bearer ', '')
+                    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+                    username: str = payload.get("sub")
+                else:
+                    raise credentials_exception
+
                 if username is None:
                     raise credentials_exception
             except JWTError as ex:
