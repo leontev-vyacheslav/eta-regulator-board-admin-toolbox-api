@@ -7,10 +7,10 @@ from src.utils.debugging import is_debug
 from src.utils.deployments import get_deployment_packages
 
 
-router = APIRouter(prefix="/deployments", tags=["Deployments"])
+router = APIRouter(prefix='/deployments', tags=['Deployments'])
 
 
-@router.get("/list")
+@router.get('/list')
 @authorize()
 async def get_deployments(
     # pylint: disable=unused-argument
@@ -22,29 +22,29 @@ async def get_deployments(
     return deployment_packages
 
 
-@router.post("/")
+@router.post('/')
 @authorize()
 async def upload_deployment(
     # pylint: disable=unused-argument
     request: Request,
     file: UploadFile = File(...),
 ):
-    if Path(file.filename).suffix != ".zip":
+    if Path(file.filename).suffix != '.zip':
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="That format filer is not allowed!",
+            detail='That format filer is not allowed!',
         )
 
     with open(
-        (f"data/deployment/{file.filename}" if is_debug() else f"_internal/data/deployment/{file.filename}"),
-        "wb",
+        (f'data/deployment/{file.filename}' if is_debug() else f'_internal/data/deployment/{file.filename}'),
+        'wb',
     ) as f:
         f.write(file.file.read())
 
     return Response(status_code=status.HTTP_200_OK)
 
 
-@router.get("/")
+@router.get('/')
 @authorize()
 async def download_deployment(
     # pylint: disable=unused-argument
@@ -61,5 +61,5 @@ async def download_deployment(
     return FileResponse(
         path=last_deployment_package.file,
         filename=last_deployment_package.file.name,
-        media_type="application/zip",
+        media_type='application/zip',
     )

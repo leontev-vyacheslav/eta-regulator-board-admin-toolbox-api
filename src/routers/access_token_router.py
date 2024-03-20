@@ -10,10 +10,10 @@ from src.utils.auth_helper import authorize
 from src.utils.encoding import create_access_token
 
 
-router = APIRouter(prefix="/access-token", tags=["Access Tokens"])
+router = APIRouter(prefix='/access-token', tags=['Access Tokens'])
 
 
-@router.get("/{device_id}")
+@router.get('/{device_id}')
 @authorize()
 async def get_access_token(
     # pylint: disable=unused-argument

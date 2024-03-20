@@ -41,14 +41,14 @@ icon = Icon(
     )
 )
 
-def start_server(host="0.0.0.0", port=5020, num_workers=1, reload=False):
-    uvicorn.run("src.main:app",
+def start_server(host='0.0.0.0', port=5020, num_workers=1, reload=False):
+    uvicorn.run('src.main:app',
                 host=host,
                 port=port,
                 reload=reload
             )
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     icon.run_detached()
     console_proxy = ConsoleProxy()
     num_workers = int(cpu_count() / 2)

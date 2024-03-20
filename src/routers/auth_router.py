@@ -12,9 +12,9 @@ from src.models.singin_model import SingInModel
 from src.utils.auth_helper import create_access_token, verify_password
 
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(prefix='/auth', tags=['Auth'])
 
-@router.get("/sign-in")
+@router.get('/sign-in')
 async def sign_in(signin: SingInModel, session: Annotated[AsyncSession, Depends(get_async_session)],):
     user = (await session.scalars(select(UserDataModel).where(UserDataModel.login == signin.login))).first()
 
@@ -28,6 +28,6 @@ async def sign_in(signin: SingInModel, session: Annotated[AsyncSession, Depends(
             status_code=status.HTTP_403_FORBIDDEN,
         )
 
-    access_token = create_access_token(data={"sub": user.login}, expires_delta=None)
+    access_token = create_access_token(data={'sub': user.login}, expires_delta=None)
 
     return AuthUserModel(login=user.login, token=access_token)

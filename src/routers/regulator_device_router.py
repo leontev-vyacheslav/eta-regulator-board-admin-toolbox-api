@@ -8,10 +8,10 @@ from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel
 from src.models.regulator_device_model import RegulatorDeviceModel
 from src.utils.auth_helper import authorize
 
-router = APIRouter(prefix="/regulator-devices", tags=["Regulators"])
+router = APIRouter(prefix='/regulator-devices', tags=['Regulators'])
 
 
-@router.get("/")
+@router.get('/')
 @authorize()
 async def get_regulators(
     # pylint: disable=unused-argument
@@ -22,11 +22,11 @@ async def get_regulators(
 
     devices = [
         {
-            "id": row.id,
-            "name": row.name,
-            "macAddress": row.mac_address,
-            "masterKey": row.master_key,
-            "creationDate": row.creation_date,
+            'id': row.id,
+            'name': row.name,
+            'macAddress': row.mac_address,
+            'masterKey': row.master_key,
+            'creationDate': row.creation_date,
         }
         for row in query.scalars()
     ]
@@ -35,7 +35,7 @@ async def get_regulators(
     return devices
 
 
-@router.get("/{device_id}")
+@router.get('/{device_id}')
 @authorize()
 async def get_regulator(
     # pylint: disable=unused-argument
@@ -51,7 +51,7 @@ async def get_regulator(
     return device
 
 
-@router.post("/")
+@router.post('/')
 @authorize()
 async def post_regulator(
     # pylint: disable=unused-argument
@@ -72,15 +72,15 @@ async def post_regulator(
     await session.refresh(device_data)
 
     return {
-        "id": device_data.id,
-        "name": device_data.name,
-        "macAddress": device_data.mac_address,
-        "masterKey": device_data.master_key,
-        "creationDate": device_data.creation_date,
+        'id': device_data.id,
+        'name': device_data.name,
+        'macAddress': device_data.mac_address,
+        'masterKey': device_data.master_key,
+        'creationDate': device_data.creation_date,
     }
 
 
-@router.delete("/{device_id}")
+@router.delete('/{device_id}')
 @authorize()
 async def delete_regulator(
     # pylint: disable=unused-argument
@@ -94,11 +94,11 @@ async def delete_regulator(
         return Response(status_code=400)
 
     device = {
-        "id": device_data.id,
-        "name": device_data.name,
-        "macAddress": device_data.mac_address,
-        "masterKey": device_data.master_key,
-        "creationDate": device_data.creation_date,
+        'id': device_data.id,
+        'name': device_data.name,
+        'macAddress': device_data.mac_address,
+        'masterKey': device_data.master_key,
+        'creationDate': device_data.creation_date,
     }
 
     await session.delete(device_data)
@@ -107,7 +107,7 @@ async def delete_regulator(
     return device
 
 
-@router.put("/")
+@router.put('/')
 @authorize()
 async def put_regulator(
     # pylint: disable=unused-argument
@@ -127,9 +127,9 @@ async def put_regulator(
     await session.commit()
 
     return {
-        "id": device.id,
-        "name": device.name,
-        "macAddress": device.mac_address,
-        "masterKey": device.master_key,
-        "creationDate": device.creation_date,
+        'id': device.id,
+        'name': device.name,
+        'macAddress': device.mac_address,
+        'masterKey': device.master_key,
+        'creationDate': device.creation_date,
     }

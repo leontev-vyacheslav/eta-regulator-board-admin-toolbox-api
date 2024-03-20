@@ -17,10 +17,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=['*'],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 app.include_router(root_router)
@@ -32,6 +32,6 @@ app.include_router(auth_router)
 
 socket_io_server = AsyncServer(async_mode='asgi')
 
-app.mount("/", ASGIApp(socket_io_server))
+app.mount('/', ASGIApp(socket_io_server))
 
 app.state.socket_io_server = socket_io_server
