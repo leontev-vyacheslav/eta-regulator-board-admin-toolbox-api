@@ -3,14 +3,11 @@ from pathlib import Path
 from typing import List
 
 from src.models.deployment_package import DeploymentPackage
-from src.utils.debugging import is_debug
 
 
 def get_deployment_packages(web_app: str | None):
 
-    deployment_package_path = (
-        'data/deployment/' if is_debug() else '_internal/data/deployment/'
-    )
+    deployment_package_path = 'data/deployment/'
 
     def strptime(s: str):
         try:

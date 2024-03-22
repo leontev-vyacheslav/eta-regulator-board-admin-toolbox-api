@@ -9,8 +9,5 @@ COPY ./src /app/src
 
 COPY ./data /app/data
 
-
-
-
 ENV ENV=${ENV}
 CMD uvicorn src.main:app --host 0.0.0.0 --port ${WEB_API_PORT}
