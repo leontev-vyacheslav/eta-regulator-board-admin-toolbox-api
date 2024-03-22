@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from fastapi import File, HTTPException, Request, Response, UploadFile, status
 from fastapi import APIRouter
@@ -8,7 +7,6 @@ from src.utils.deployments import get_deployment_packages
 
 
 router = APIRouter(prefix='/deployments', tags=['Deployments'])
-
 
 @router.get('/list')
 @authorize()
@@ -23,7 +21,7 @@ async def get_deployments(
 
 
 @router.post('/')
-#@authorize()
+# @authorize()
 async def upload_deployment(
     # pylint: disable=unused-argument
     request: Request,
@@ -34,9 +32,6 @@ async def upload_deployment(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail='That format filer is not allowed!',
         )
-
-    env = os.environ.get('ENV')
-    is_production = env is not None and env == 'production'
 
     with open(
         f'data/deployment/{file.filename}',
