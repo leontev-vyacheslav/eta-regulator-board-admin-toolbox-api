@@ -1,19 +1,22 @@
 services:
   web-api:
-    container_name: energytechaudit-regulator-board-admin-toolbox-api
+    container_name: eta-regulator-board-admin-api
     environment:
       - WEB_API_PORT=5020
     build:
       context: .
       dockerfile: Dockerfile
-    image: energytechaudit-regulator-board-admin-toolbox-api-image
+    image: eta-regulator-board-admin-api-image
     ports:
       - "5020:5020"
+
+    volumes:
+      - deployment_data:/app/data/deployment
     depends_on:
       - database
 
   database:
-    container_name: energytechaudit-regulator-board-admin-toolbox-database
+    container_name: eta-regulator-board-admin-database
     image: postgres:latest
     environment:
       - POSTGRES_USER=postgres
@@ -21,12 +24,19 @@ services:
     ports:
       - "25432:5432"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
+
   postgres_data:
     driver_opts:
       type: none
-      device: /home/admin-leo/_data
+      device: /home/admin-leo/eta-regulator-board-admin-database-volume
+      o: bind
+
+  deployment_data:
+    driver_opts:
+      type: none
+      device: /home/admin-leo/eta-regulator-board-admin-deployment-volume
       o: bind
 

@@ -1,9 +1,9 @@
+import os
 from pathlib import Path
 from fastapi import File, HTTPException, Request, Response, UploadFile, status
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
 from src.utils.auth_helper import authorize
-from src.utils.debugging import is_debug
 from src.utils.deployments import get_deployment_packages
 
 
@@ -23,7 +23,7 @@ async def get_deployments(
 
 
 @router.post('/')
-@authorize()
+#@authorize()
 async def upload_deployment(
     # pylint: disable=unused-argument
     request: Request,
@@ -35,8 +35,11 @@ async def upload_deployment(
             detail='That format filer is not allowed!',
         )
 
+    env = os.environ.get('ENV')
+    is_production = env is not None and env == 'production'
+
     with open(
-        (f'data/deployment/{file.filename}' if is_debug() else f'_internal/data/deployment/{file.filename}'),
+        f'data/deployment/{file.filename}',
         'wb',
     ) as f:
         f.write(file.file.read())
