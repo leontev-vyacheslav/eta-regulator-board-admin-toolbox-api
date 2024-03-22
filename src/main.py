@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from socketio import ASGIApp, AsyncServer
 
+from src.data_access.database_connect import init_database
 from src.routers.access_token_router import router as access_token_router
 from src.routers.root_router import router as root_router
 from src.routers.regulator_device_router import router as regulator_device_router
@@ -14,6 +14,8 @@ app = FastAPI(
     description='ETA Regulator Board Admin Toolbox',
     version='1.0.0',
 )
+
+init_database()
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,9 +31,3 @@ app.include_router(access_token_router)
 app.include_router(deployment_package_router)
 app.include_router(backup_router)
 app.include_router(auth_router)
-
-socket_io_server = AsyncServer(async_mode='asgi')
-
-app.mount('/', ASGIApp(socket_io_server))
-
-app.state.socket_io_server = socket_io_server

@@ -9,11 +9,21 @@ services:
     image: energytechaudit-regulator-board-admin-toolbox-api-image
     ports:
       - "5020:5020"
+    depends_on:
+      - database
+
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1D#4wHm2
+    ports:
+      - "25432:5432"
     volumes:
-      - sqlite_data:/app/_internal/data
+      - ./postgres_data:/var/lib/postgresql/data
 
 volumes:
-  sqlite_data:
+  postgres_data:
     driver_opts:
       type: none
       device: /home/admin-leo/_data

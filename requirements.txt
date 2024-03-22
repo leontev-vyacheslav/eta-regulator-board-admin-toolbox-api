@@ -1,11 +1,11 @@
 fastapi
 uvicorn
 sqlalchemy
-aiosqlite
+sqlalchemy-utils
 pystray
 psutil
 pyaes
-python-socketio
 python-multipart
 python-jose[cryptography]
 passlib[bcrypt]
+psycopg[binary,pool]
