@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy_utils import database_exists, create_database, drop_database
 
-from src.utils.debugging import is_debug
 
 from src.data_models.user_data_model import UserDataModel
 from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel, BaseDataModel
