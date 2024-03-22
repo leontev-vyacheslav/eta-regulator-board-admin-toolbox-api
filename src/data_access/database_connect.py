@@ -10,13 +10,14 @@ from src.utils.debugging import is_debug
 from src.data_models.user_data_model import UserDataModel
 from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel, BaseDataModel
 
+env = os.environ.get('ENV')
+is_production = env is not None and env == 'production'
 
 
-DB_PROVIDER = 'sqlite+aiosqlite://'
-DB_URL = 'data' if is_debug() else '_internal/data'
-DB_FILE = 'data.sqlite3'
-# DB_CONNECTION_STRING = f'{DB_PROVIDER}/{DB_URL}/{DB_FILE}'
-DB_CONNECTION_STRING = "postgresql+psycopg://postgres:1D#4wHm2@172.21.120.224/eta_regulator_board_admin_toolbox"
+DB_PROVIDER = 'postgresql+psycopg:/'
+DB_URL = f"{'database' if is_production else '172.21.120.224'}/eta_regulator_board_admin_toolbox"
+
+DB_CONNECTION_STRING = f"{DB_PROVIDER}/postgres:1D#4wHm2@{DB_URL}"
 
 engine = create_async_engine(DB_CONNECTION_STRING)
 async_session_maker = async_sessionmaker(engine)
@@ -28,7 +29,7 @@ async def get_async_session() -> typing.AsyncGenerator[AsyncSession, None]:
 
 
 def init_database():
-    env = os.environ.get('ENV')
+
     db_engine = create_engine(DB_CONNECTION_STRING)
 
     def init_data():
@@ -70,7 +71,7 @@ def init_database():
         create_database(db_engine.url)
         BaseDataModel.metadata.create_all(db_engine)
 
-    is_production = env is not None and env == 'production'
+
 
     if is_production:
         if not database_exists(db_engine.url):
