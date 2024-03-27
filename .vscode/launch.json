@@ -5,13 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "debug",
+            "name": "api-localhost",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
                 "src.main:app",
-                "--host=192.168.0.107",
+                "--host=127.0.01",
+                "--reload",
+                "--port=5020"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "api-wifi",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "src.main:app",
+                "--host=127.0.01",
                 "--reload",
                 "--port=5020"
             ],

@@ -1,5 +1,6 @@
 import os
 import typing
+from sys import platform
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -12,10 +13,13 @@ from src.data_models.regulator_device_data_model import RegulatorDeviceDataModel
 env = os.environ.get('ENV')
 is_production = env is not None and env == 'production'
 
+if platform == 'windows':
+    DATABASE_LOCALHOST = '172.21.120.224' # from wsl
+else:
+    DATABASE_LOCALHOST = 'localhost' # from docker (forwarded)
 
 DB_PROVIDER = 'postgresql+psycopg:/'
-DB_URL = f"{'database' if is_production else '172.21.120.224'}/eta_regulator_board_admin_toolbox"
-
+DB_URL = f"{'database' if is_production else DATABASE_LOCALHOST}/eta_regulator_board_admin_toolbox"
 DB_CONNECTION_STRING = f"{DB_PROVIDER}/postgres:1D#4wHm2@{DB_URL}"
 
 engine = create_async_engine(DB_CONNECTION_STRING)
@@ -69,8 +73,6 @@ def init_database():
     def init_schema():
         create_database(db_engine.url)
         BaseDataModel.metadata.create_all(db_engine)
-
-
 
     if is_production:
         if not database_exists(db_engine.url):
