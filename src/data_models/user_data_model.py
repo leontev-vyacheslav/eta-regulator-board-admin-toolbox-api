@@ -11,3 +11,4 @@ class UserDataModel(BaseDataModel):
     id: Mapped[str] = mapped_column(String, primary_key=True)
     login: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String)
+    session_token: Mapped[str] = mapped_column(String, nullable=True)

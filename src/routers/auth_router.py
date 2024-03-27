@@ -30,4 +30,27 @@ async def sign_in(signin: SingInModel, session: Annotated[AsyncSession, Depends(
 
     access_token = create_access_token(data={'sub': user.login}, expires_delta=None)
 
+    # save session token
+    user.session_token = access_token
+    await session.commit()
+
+    return AuthUserModel(login=user.login, token=access_token)
+
+
+@router.get('/refresh-token')
+async def refresh_token(auth_user: AuthUserModel, session: Annotated[AsyncSession, Depends(get_async_session)],):
+
+    user = (await session.scalars(select(UserDataModel).where(UserDataModel.session_token == auth_user.token))).first()
+
+    if user is None:
+        return Response(
+            status_code=status.HTTP_403_FORBIDDEN,
+        )
+
+    access_token = create_access_token(data={'sub': user.login}, expires_delta=None)
+
+     # save session token
+    user.session_token = access_token
+    await session.commit()
+
     return AuthUserModel(login=user.login, token=access_token)
