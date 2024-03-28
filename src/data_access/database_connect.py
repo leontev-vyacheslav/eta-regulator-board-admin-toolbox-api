@@ -2,7 +2,7 @@ import os
 import typing
 from sys import platform
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy_utils import database_exists, create_database, drop_database
 
@@ -22,8 +22,11 @@ DB_PROVIDER = 'postgresql+psycopg:/'
 DB_URL = f"{'database' if is_production else DATABASE_LOCALHOST}/eta_regulator_board_admin_toolbox"
 DB_CONNECTION_STRING = f"{DB_PROVIDER}/postgres:1D#4wHm2@{DB_URL}"
 
-engine = create_async_engine(DB_CONNECTION_STRING)
-async_session_maker = async_sessionmaker(engine)
+async_engine = create_async_engine(DB_CONNECTION_STRING)
+async_session_maker = async_sessionmaker(async_engine)
+
+engine = create_engine(DB_CONNECTION_STRING)
+session_maker = sessionmaker(engine)
 
 
 async def get_async_session() -> typing.AsyncGenerator[AsyncSession, None]:
@@ -31,13 +34,21 @@ async def get_async_session() -> typing.AsyncGenerator[AsyncSession, None]:
         yield session
 
 
+def get_session() -> typing.Generator[Session, None, None]:
+    session = session_maker()
+    try:
+        yield session
+    finally:
+        session.close()
+
+
 def init_database():
 
     db_engine = create_engine(DB_CONNECTION_STRING)
 
     def init_data():
-        Session = sessionmaker(db_engine)
-        session = Session()
+        SessionLocal = sessionmaker(db_engine)
+        session = SessionLocal()
 
         session.add_all(
             [

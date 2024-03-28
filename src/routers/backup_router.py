@@ -16,7 +16,7 @@ router = APIRouter(prefix='/backups', tags=['Backups'])
 
 
 @router.get('/')
-# @authorize()
+@authorize()
 async def get_database(
     # pylint: disable=unused-argument
     request: Request,
